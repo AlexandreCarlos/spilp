@@ -318,7 +318,7 @@ def hitsByExtension(file_name, extensions_to_check, limit):
 # ---- split each logline into multiple variables, populate dictionaries and db ---- #		
 def splitLogline(log_line):
 	# IIS log fields layout
-	date, time, s_sitename, s_ip, cs_method, cs_uri_stem, cs_uri_query, s_port, cs_username, c_ip, cs_user_agent, sc_status, sc_substatus, sc_win32_status = log_line.split(" ")
+	date, time, s_sitename, s_ip, cs_method, cs_uri_stem, cs_uri_query, s_port, cs_username, c_ip, cs_user_agent, sc_status, sc_substatus, sc_win32_status, time_taken  = log_line.split(" ")
 	
 	# filter by country
 	if CHECK_COUNTRY:
@@ -333,8 +333,9 @@ def splitLogline(log_line):
 	hits_by_extension_count[cs_uri_stem] += 1	
 	
 	db_cursor.execute(
-		"INSERT INTO hits_by_extension_table(date, time, c_ip, cs_method, s_port, cs_uri_stem, cs_user_agent, sc_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-		(date, time, c_ip, cs_method, s_port, cs_uri_stem, cs_user_agent, sc_status)
+		# "INSERT INTO hits_by_extension_table(date, time, c_ip, cs_method, s_port, cs_uri_stem, cs_user_agent, sc_status, s_ip, cs_username, time_taken) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+		"INSERT INTO hits_by_extension_table(date, time, s_sitename, s_ip, cs_method, cs_uri_stem, cs_uri_query, s_port, cs_username, c_ip, cs_user_agent, sc_status, sc_substatus, sc_win32_status, time_taken) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+		(date, time, s_sitename, s_ip, cs_method, cs_uri_stem, cs_uri_query, s_port, cs_username, c_ip, cs_user_agent, sc_status, sc_substatus, sc_win32_status, time_taken)
 	)
 
 
@@ -405,7 +406,8 @@ total_events = 0
 # initialize sqlite DB
 db_connection = sqlite3.connect(DB_STORAGE)
 db_cursor = db_connection.cursor()
-db_cursor.execute("CREATE TABLE IF NOT EXISTS hits_by_extension_table(date, time, c_ip, cs_method, s_port, cs_uri_stem, cs_user_agent, sc_status)")
+# db_cursor.execute("CREATE TABLE IF NOT EXISTS hits_by_extension_table(date, time, c_ip, cs_method, s_port, cs_uri_stem, cs_user_agent, sc_status, s_ip, cs_username, time_taken)")
+db_cursor.execute("CREATE TABLE IF NOT EXISTS hits_by_extension_table(date, time, s_sitename, s_ip, cs_method, cs_uri_stem, cs_uri_query, s_port, cs_username, c_ip, cs_user_agent, sc_status, sc_substatus, sc_win32_status, time_taken)")
 db_connection.commit()
 
 # initialize empty defaultdicts 
@@ -432,7 +434,7 @@ agentHits("agentHits") if CHECK_AGENTS else 0
 methodHits("methodHits") if CHECK_METHODS else 0
 
 db_connection.close()
-cleanUp()
+# cleanUp()
 
 time_stop = gmtime()
 time_diff_seconds = mktime(time_stop) - mktime(time_start)

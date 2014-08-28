@@ -20,7 +20,8 @@
 # -- put db on HDD - for bigger databases (bigger) 
 # Use if total ammount of log files is bigger than 2/3 of your total ammount of free RAM.
 # :: set to '.tempdb' to put the database to HDD 
-DB_STORAGE = ':memory:' 
+# DB_STORAGE = ':memory:'
+DB_STORAGE = 'iislogs.db'
 
 
 

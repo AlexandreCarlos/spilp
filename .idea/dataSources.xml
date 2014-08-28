@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" hash="3577599423">
+    <data-source source="LOCAL" name="SQLite - IISlogs" uuid="38ecb387-ffd8-4cc6-b9dc-edd722bdd9a2">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <auto-commit>false</auto-commit>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/iislogs.db</jdbc-url>
+      <libraries />
+    </data-source>
+  </component>
+</project>
+
